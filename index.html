@@ -1,0 +1,36 @@
+<html>
+    <body>
+        <div id="container"></div>
+        <a class="LinkItem" href="/product-list">product list</a>
+        <a class="LinkItem" href="/article-list">article list</a>
+        <script>
+            // 현재 로케이션의 패스 이름으로 어떤 것을 그릴지를 정하는 라우팅 로직 필요
+            function route() {
+                const { pathname } = location
+                const $container = document.querySelector('#container')
+                    if(pathname === '/') {
+                        $container.innerHTML = '<h1>Home</h1>'
+                    } else if(pathname === '/product-list') {
+                        $container.innerHTML = "<h1>상품 목록</h1>"
+                    } else if(pathname === '/article-list') {
+                        $container.innerHTML = "<h1>게시글 목록</h1>"
+                    }
+            }
+            route()
+            // 실제로 화면이동이 아니지만, pushState를 호출시킬 이벤트 처리
+            window.addEventListener('click', e => {
+                if(e.target.className === 'LinkItem') {
+                    e.preventDefault()
+
+                    const { href } = e.target
+                    const path = href.replace(window.location.origin, '')
+
+                    history.pushState(null, null, path)
+                    route()
+                }
+            })
+            // 뒤로가기나 앞으로가기 할 때만 발생
+            window.addEventListener('popstate', () => route())
+        </script>
+    </body>
+</html>
